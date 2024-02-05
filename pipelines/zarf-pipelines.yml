@@ -1,0 +1,31 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+- stage: Build
+  jobs:
+  - job: BuildZarfPackage
+    displayName: Build Zarf Package
+    steps:
+    - checkout: self
+
+    - script: |
+        echo "Installing Zarf CLI..."
+        curl -LO "https://github.com/defenseunicorns/zarf/releases/download/vYOUR_ZARF_VERSION/zarf-linux-amd64"
+        chmod +x zarf-linux-amd64
+        sudo mv zarf-linux-amd64 /usr/local/bin/zarf
+      displayName: 'Install Zarf CLI'
+
+    - script: |
+        echo "Building Zarf package..."
+        zarf package create --output=zarf-httpd-package.tar.gz
+      displayName: 'Create Zarf Package'
+    
+    # Upload Zarf Package to Azure Blob Storage
+    - script: |
+        echo "Uploading Zarf package to Azure Blob Storage..."
+        az storage blob upload --account-name rjzarfstorage --container-name zarf --file zarf-httpd-package.tar.gz --name zarf-httpd-package.tar.gz
+      displayName: 'Upload Zarf Package'

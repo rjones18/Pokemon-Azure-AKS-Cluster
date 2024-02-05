@@ -1,0 +1,57 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  terraformVersion: '1.0.0'  # specify your desired Terraform version
+
+steps:
+- task: MicrosoftSecurityDevOps@1
+  inputs:
+    command: 'run'  # Choose from 'run', 'pre-job', 'post-job'
+    # config: '.'  # Optional: Specify the path to your MSDO config file
+    policy: 'azuredevops'  # Choose from 'azuredevops', 'microsoft', 'none'
+    categories: 'IaC,secrets'  # Optional: Specify categories like 'secrets', 'code', etc.
+    # languages: 'javascript,typescript'  # Optional: Specify languages to analyze
+    tools: 'terrascan,trivy'  # Optional: Specify tools like 'bandit', 'binskim', etc.
+    break: false  # Set to true if you want to fail the build on error results
+    publish: true  # Set to true to publish SARIF results
+    artifactName: 'CodeAnalysisLogs'  # Optional: Specify the artifact name for SARIF results
+
+- script: |
+    echo Installing Snyk CLI...
+    npm install -g snyk
+  displayName: 'Install Snyk CLI'
+
+- script: |
+    echo Authenticating with Snyk...
+    snyk auth $(SNYK_TOKEN)
+  displayName: 'Authenticate Snyk CLI'
+
+- script: |
+    echo Running Snyk IaC scan...
+    snyk iac test --report || echo "Snyk found vulnerabilities!"
+  displayName: 'Snyk IaC Scan'
+- task: TerraformTaskV4@4
+  inputs:
+    provider: 'azurerm'
+    command: 'init'
+    backendServiceArm: 'terrafromiacdevops1'
+    backendAzureRmResourceGroupName: 'test-grp'
+    backendAzureRmStorageAccountName: 'regterraformstate201'
+    backendAzureRmContainerName: 'tfstatefiles'
+    backendAzureRmKey: 'az-devops-aks-terraform3.tfstate'
+
+- task: TerraformTaskV4@4
+  inputs:
+    provider: 'azurerm'
+    command: 'plan'
+    environmentServiceNameAzureRM: 'terrafromiacdevops1'
+
+- task: TerraformTaskV4@4
+  inputs:
+    provider: 'azurerm'
+    command: 'apply'
+    environmentServiceNameAzureRM: 'terrafromiacdevops1'
