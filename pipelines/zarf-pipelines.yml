@@ -21,7 +21,7 @@ stages:
 
     - script: |
         echo "Building Zarf package..."
-        zarf package create --output=zarf-httpd-package.tar.gz
+        zarf package create --components=zarf.yaml --output=zarf-httpd-package.tar.gz
       displayName: 'Create Zarf Package'
     
     # Upload Zarf Package to Azure Blob Storage
