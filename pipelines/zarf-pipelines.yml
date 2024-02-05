@@ -30,5 +30,6 @@ stages:
     # Upload Zarf Package to Azure Blob Storage
     - script: |
         echo "Uploading Zarf package to Azure Blob Storage..."
+        
         az storage blob upload --account-name rjzarfstorage --container-name zarf --file zarf-httpd-package.tar.gz --name zarf-httpd-package.tar.gz
       displayName: 'Upload Zarf Package'
