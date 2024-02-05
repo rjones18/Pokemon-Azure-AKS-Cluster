@@ -23,7 +23,7 @@ stages:
         source ~/.profile  # Or the appropriate file for your shell
         brew tap defenseunicorns/tap && brew install zarf
         echo "Building Zarf package..."
-        yes | zarf package create --output=zarf-httpd-package.tar.gz
+        y | zarf package create --output=zarf-httpd-package.tar.gz
 
       displayName: 'Install Zarf CLI and Create Zarf Package'
     
