@@ -13,10 +13,16 @@ stages:
     - checkout: self
 
     - script: |
-        echo "Installing Zarf CLI..."
-        curl -LO "https://github.com/defenseunicorns/zarf/releases/download/vYOUR_ZARF_VERSION/zarf-linux-amd64"
-        chmod +x zarf-linux-amd64
-        sudo mv zarf-linux-amd64 /usr/local/bin/zarf
+        echo "Installing Brew and Zarf CLI..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.profile
+        echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.bash_profile
+        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+        echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.zshrc
+        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+        source ~/.profile  # Or the appropriate file for your shell
+        brew tap defenseunicorns/tap && brew install zarf
+
       displayName: 'Install Zarf CLI'
 
     - script: |
