@@ -32,5 +32,5 @@ stages:
         echo "Uploading Zarf package to Azure Blob Storage..."
         az login --service-principal -u $(ServicePrincipalId) -p $(ServicePrincipalKey) --tenant $(TenantId)
         ls
-        az storage blob upload --account-name rjzarfstorage --container-name zarf --file zarf-package-httpd-arm64-1.0.0.tar.zst --name zarf-package-httpd-arm64-1.0.0.tar.zst --sas-token "$(SasToken)"
+        az storage blob upload --account-name rjzarfstorage --container-name zarf --file zarf-package-httpd-amd64-1.0.0.tar.zst --name zarf-package-httpd-amd64-1.0.0.tar.zst --sas-token "$(SasToken)"
       displayName: 'Upload Zarf Package'
