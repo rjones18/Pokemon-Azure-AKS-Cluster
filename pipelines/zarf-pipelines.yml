@@ -33,3 +33,13 @@ stages:
         az login --service-principal -u $(ServicePrincipalId) -p $(ServicePrincipalKey) --tenant $(TenantId)
         az storage blob upload --account-name rjzarfstorage --container-name zarf --file zarf-package-httpd-amd64-1.0.0.tar.zst --name zarf-package-httpd-amd64-1.0.0.tar.zst --sas-token "$(SasToken)" --overwrite
       displayName: 'Upload Zarf Package'
+
+
+    # Upload Zarf Package to Azure Blob Storage
+    - script: |
+        echo "Deploying Zarf package to AKS"
+        az aks get-credentials --resource-group test-k8s-resources --name example-aks1
+        zarf init --confirm
+        zarf package deploy zarf-package-httpd-amd64-1.0.0.tar.zst --confirm
+
+      displayName: 'Deploy Zarf Package'
