@@ -25,6 +25,8 @@ stages:
         az login --service-principal -u $(ServicePrincipalId) -p $(ServicePrincipalKey) --tenant $(TenantId)
         echo "Building Zarf package..."
         zarf package create ./zarf-package-yaml --confirm
+        az aks get-credentials --resource-group test-k8s-resources --name example-aks1
+        zarf init package --confirm
       displayName: 'Install Zarf CLI and Create Zarf Package'
 
     # Upload Zarf Package to Azure Blob Storage
