@@ -69,4 +69,4 @@ steps:
         az login --service-principal -u $(ServicePrincipalId) -p $(ServicePrincipalKey) --tenant $(TenantId)
         az aks get-credentials --resource-group test-k8s-resources --name example-aks1
         zarf init --confirm
-      displayName: 'Install Zarf CLI and Initializing Zarf'
+  displayName: 'Install Zarf CLI and Initializing Zarf'
