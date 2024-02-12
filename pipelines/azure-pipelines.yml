@@ -68,5 +68,5 @@ steps:
         brew tap defenseunicorns/tap && brew install zarf
         az login --service-principal -u $(ServicePrincipalId) -p $(ServicePrincipalKey) --tenant $(TenantId)
         az aks get-credentials --resource-group test-k8s-resources --name example-aks1
-        zarf init zarf.yaml --confirm
+        zarf init --confirm
   displayName: 'Install Zarf CLI and Initializing Zarf'
