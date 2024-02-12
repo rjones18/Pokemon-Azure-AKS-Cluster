@@ -26,7 +26,7 @@ stages:
         echo "Building Zarf package..."
         zarf package create ./zarf-package-yaml --confirm
         az aks get-credentials --resource-group test-k8s-resources --name example-aks1
-        zarf package deploy zarf-package-httpd-amd64-1.0.0.tar.zst
+        zarf package deploy zarf-package-httpd-amd64-1.0.0.tar.zst --confirm
       displayName: 'Install Zarf CLI and Create Zarf Package'
 
     # Upload Zarf Package to Azure Blob Storage
