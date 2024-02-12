@@ -22,15 +22,14 @@ stages:
         eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
         source ~/.profile  # Or the appropriate file for your shell
         brew tap defenseunicorns/tap && brew install zarf
-        echo "Building Zarf package..."
-        zarf package create --confirm
         az login --service-principal -u $(ServicePrincipalId) -p $(ServicePrincipalKey) --tenant $(TenantId)
-        az aks get-credentials --resource-group test-k8s-resources --name example-aks1
-        zarf init --confirm
+        echo "Building Zarf package..."
+        zarf package create ./zarf-package-yaml --confirm
       displayName: 'Install Zarf CLI and Create Zarf Package'
-    
+
     # Upload Zarf Package to Azure Blob Storage
     - script: |
+        
         echo "Uploading Zarf package to Azure Blob Storage..."
         az storage blob upload --account-name rjzarfstorage --container-name zarf --file zarf-package-httpd-amd64-1.0.0.tar.zst --name zarf-package-httpd-amd64-1.0.0.tar.zst --sas-token "$(SasToken)" --overwrite
-      displayName: 'Upload Zarf Package'
+      displayName: 'Upload Zarf Package to Blob Storage'

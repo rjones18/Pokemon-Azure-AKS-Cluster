@@ -1,26 +1,43 @@
-kind: ZarfPackageConfig
+kind: ZarfInitConfig
 metadata:
-  name: httpd
-  description: Simple example to load httpd into K8s in the airgap
-  version: 1.0.0
+  name: init
+  description: Used to establish a new Zarf cluster
 
 components:
-  - name: baseline
+  - name: k3s
+    import:
+      path: packages/distros/k3s
+
+  # This package moves the injector & registries binaries
+  - name: zarf-injector
     required: true
-    manifests:
-      - name: httpd
-        namespace: httpd
-        files:
-          - manifests/deployment.yaml
-          - manifests/service.yaml
-    images:
-      - httpd
-    actions:
-      onDeploy:
-        after:
-          - wait:
-              cluster:
-                kind: deployment
-                name: httpd
-                namespace: httpd
-                condition: available
+    import:
+      path: packages/zarf-registry
+
+  # Creates the temporary seed-registry
+  - name: zarf-seed-registry
+    required: true
+    import:
+      path: packages/zarf-registry
+
+  # Creates the permanent registry
+  - name: zarf-registry
+    required: true
+    import:
+      path: packages/zarf-registry
+
+  # Creates the pod+git mutating webhook
+  - name: zarf-agent
+    required: true
+    import:
+      path: packages/zarf-agent
+
+  # (Optional) Adds logging to the cluster
+  - name: logging
+    import:
+      path: packages/logging-pgl
+
+  # (Optional) Adds a git server to the cluster
+  - name: git-server
+    import:
+      path: packages/gitea

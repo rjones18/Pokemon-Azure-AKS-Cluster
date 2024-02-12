@@ -1,0 +1,26 @@
+kind: ZarfPackageConfig
+metadata:
+  name: httpd
+  description: Simple example to load httpd into K8s in the airgap
+  version: 1.0.0
+
+components:
+  - name: baseline
+    required: true
+    manifests:
+      - name: httpd
+        namespace: httpd
+        files:
+          - manifests/deployment.yaml
+          - manifests/service.yaml
+    images:
+      - httpd
+    actions:
+      onDeploy:
+        after:
+          - wait:
+              cluster:
+                kind: deployment
+                name: httpd
+                namespace: httpd
+                condition: available

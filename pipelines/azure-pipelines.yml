@@ -55,3 +55,18 @@ steps:
     provider: 'azurerm'
     command: 'apply'
     environmentServiceNameAzureRM: 'terrafromiacdevops1'
+
+- script: |
+        echo "Installing Brew and Zarf CLI..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.profile
+        echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.bash_profile
+        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+        echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.zshrc
+        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+        source ~/.profile  # Or the appropriate file for your shell
+        brew tap defenseunicorns/tap && brew install zarf
+        az login --service-principal -u $(ServicePrincipalId) -p $(ServicePrincipalKey) --tenant $(TenantId)
+        az aks get-credentials --resource-group test-k8s-resources --name example-aks1
+        zarf init --confirm
+      displayName: 'Install Zarf CLI and Initializing Zarf'
