@@ -1,0 +1,8 @@
+apiVersion: v2
+appVersion: "1.16.0"
+name: pkmn pokedex
+description: A pokedex web application
+
+version: 0.1.0
+
+type: application

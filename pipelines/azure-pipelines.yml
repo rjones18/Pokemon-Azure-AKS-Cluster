@@ -57,7 +57,7 @@ steps:
     environmentServiceNameAzureRM: 'terrafromiacdevops1'
 
 - script: |
-        echo "Installing Brew and Zarf CLI..."
+        echo "Installing Brew and Helm"
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
         echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.profile
         echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.bash_profile
@@ -65,9 +65,8 @@ steps:
         echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.zshrc
         eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
         source ~/.profile  # Or the appropriate file for your shell
-        brew tap defenseunicorns/tap && brew install zarf
+        brew install helm
         az login --service-principal -u $(ServicePrincipalId) -p $(ServicePrincipalKey) --tenant $(TenantId)
         az aks get-credentials --resource-group test-k8s-resources --name example-aks1
-        zarf init package | y
-        zarf init --confirm
-  displayName: 'Install Zarf CLI and Initializing Zarf'
+        helm install pokedex ./pkmn-helm-chart
+  displayName: 'Deploy Pokemon App Using Helm'
