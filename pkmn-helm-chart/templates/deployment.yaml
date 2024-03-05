@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: pkmn-deployment
 spec:
-  replicas: {{ .Values.replicationCount }}
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: pkmn
