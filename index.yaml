@@ -9,6 +9,6 @@ entries:
     name: pkmn pokedex
     type: application
     urls:
-    - https://rjones18.github.io/pkmn-app-deployment/pkmn%20pokedex-0.1.0.tgz
+    - https://rjones18.github.io/Pokemon-Azure-AKS-Cluster/pkmn-pokedex-0.1.0.tgz
     version: 0.1.0
 generated: "2024-06-12T10:14:55.322048-05:00"
